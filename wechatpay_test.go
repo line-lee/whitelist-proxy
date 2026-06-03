@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/line-lee/wechat-pay/core"
 	"github.com/line-lee/wechat-pay/services/transferbill"
-	"github.com/whitelist-proxy/confidential"
+	"github.com/line-lee/whitelist-proxy/confidential"
 	"testing"
 )
 

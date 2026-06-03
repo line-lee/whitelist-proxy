@@ -1,4 +1,4 @@
-module github.com/whitelist-proxy
+module github.com/line-lee/whitelist-proxy
 
 go 1.25.0
 
