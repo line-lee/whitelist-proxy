@@ -32,6 +32,5 @@ func NewRequestWithProxy(method, address string, body io.Reader, isProxy bool) (
 	}
 	// 设置 DestinationDomain 头，Nginx 会根据它代理到目标
 	request.Header.Set("DestinationDomain", domain)
-	log.Printf("经过代理服务器，重建了request：%s | %s\n", method, address)
 	return request, err
 }

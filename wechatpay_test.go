@@ -1,19 +1,47 @@
 package whitelist_proxy
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/line-lee/wechat-pay/core"
 	"github.com/line-lee/wechat-pay/services/transferbill"
-	"github.com/line-lee/whitelist-proxy/confidential"
+	"log"
+	"os"
 	"testing"
 )
 
+type WechatPayConfig struct {
+	PrivateKeyStr       string
+	MchID               string
+	CertificateSerialNo string
+	MchAPIv3Key         string
+}
+
+var wpc *WechatPayConfig
+
+func GetWechatPayConfig() *WechatPayConfig {
+	if wpc != nil {
+		return wpc
+	}
+	data, err := os.ReadFile("E:\\github\\whitelist-proxy-wechatpay-config.json")
+	if err != nil {
+		log.Fatalln("读取微信支付配置文件失败:", err)
+	}
+	// 反序列化到结构体对象
+	err = json.Unmarshal(data, &wpc)
+	if err != nil {
+		log.Fatalln("微信支付配置反序列化失败:", err)
+	}
+	return wpc
+}
+
 func TestTransferBill(t *testing.T) {
+	wechatPayConfig := GetWechatPayConfig()
 	request := TransferBillRequest{
-		PrivateKeyStr:       confidential.PrivateKeyStr,
-		MchID:               confidential.MchID,
-		CertificateSerialNo: confidential.CertificateSerialNo,
-		MchAPIv3Key:         confidential.MchAPIv3Key,
+		PrivateKeyStr:       wechatPayConfig.PrivateKeyStr,
+		MchID:               wechatPayConfig.MchID,
+		CertificateSerialNo: wechatPayConfig.CertificateSerialNo,
+		MchAPIv3Key:         wechatPayConfig.MchAPIv3Key,
 		Request: transferbill.CreateTransferBillRequest{
 			Appid:           core.String("wx2db503e0c502dd4b"),
 			OutBillNo:       core.String("xk202606031620no23000001"),

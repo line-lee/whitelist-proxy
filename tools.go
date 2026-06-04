@@ -9,6 +9,12 @@ import (
 	"net/http"
 )
 
+var isDebug = true
+
+func SetRelease() {
+	isDebug = false
+}
+
 const (
 	Success = 1
 	Error   = 100
@@ -50,6 +56,10 @@ func sdkProxy(path string, param any) []byte {
 		respBytes, _ := json.Marshal(response{Code: Error, Msg: fmt.Sprintf("SDK代理，response Body io.ReadAll，抛出错误：%v", err)})
 		return respBytes
 	}
-	log.Printf("SDK代理结果: %s\n", string(body))
+	if isDebug {
+		log.Printf("SDK代理路径: %s\n", path)
+		log.Printf("SDK代理参数: %s\n", jsonData)
+		log.Printf("SDK代理结果: %s\n", string(body))
+	}
 	return body
 }
